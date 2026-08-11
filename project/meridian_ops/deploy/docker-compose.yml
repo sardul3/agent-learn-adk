@@ -1,0 +1,26 @@
+services:
+  orderops-api:
+    build:
+      context: ../../..
+      dockerfile: project/meridian_ops/deploy/Dockerfile
+    image: meridian-orderops:${MERIDIAN_IMAGE_TAG:-0.1.0}
+    ports:
+      - "8080:8080"
+    environment:
+      MERIDIAN_API_KEY: ${MERIDIAN_API_KEY:-dev-local-key-change-me}
+      MERIDIAN_ENV: compose
+      MERIDIAN_MODEL_NAME: ${MERIDIAN_MODEL_NAME:-gemini-2.5-flash}
+      MERIDIAN_GIT_SHA: ${MERIDIAN_GIT_SHA:-local}
+      MERIDIAN_IMAGE_TAG: ${MERIDIAN_IMAGE_TAG:-0.1.0}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz')",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
