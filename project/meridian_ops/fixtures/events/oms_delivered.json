@@ -1,0 +1,10 @@
+{
+  "id": "oms-evt-10001",
+  "type": "oms.lifecycle_changed",
+  "occurred_at": "2026-08-10T17:12:00Z",
+  "data": {
+    "order_id": "MC-1048292",
+    "lifecycle": "delivered",
+    "pod_photo_present": false
+  }
+}

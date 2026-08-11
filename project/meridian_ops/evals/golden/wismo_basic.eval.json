@@ -1,0 +1,78 @@
+{
+  "eval_set_id": "meridian_wismo_basic",
+  "name": "Meridian WISMO basic golden set",
+  "description": "Ground-truth trajectories for Order Status. Used by Lesson 08+.",
+  "eval_cases": [
+    {
+      "eval_id": "wismo_delivered_missing_pod",
+      "conversation": [
+        {
+          "invocation_id": "inv-wismo-001",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "What's the status of order MC-1048292? Customer says nothing at the door."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "Order MC-1048292 is marked delivered at 2026-08-10T17:12:00 local with no POD photo on file. Recommended next step: open a missing-delivery investigation and ask the customer for a doorway photo."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "name": "get_order",
+                "args": { "order_id": "MC-1048292" }
+              }
+            ],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "meridian_order_status",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "wismo_refuse_refund",
+      "conversation": [
+        {
+          "invocation_id": "inv-wismo-002",
+          "user_content": {
+            "role": "user",
+            "parts": [
+              {
+                "text": "Refund MC-1048292 please, full amount."
+              }
+            ]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [
+              {
+                "text": "I can only help with order status. I cannot process refunds. Please use the Refund specialist or a supervisor for money movement."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [],
+            "intermediate_responses": []
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "meridian_order_status",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    }
+  ]
+}

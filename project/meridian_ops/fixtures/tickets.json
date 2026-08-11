@@ -1,0 +1,50 @@
+[
+  {
+    "ticket_id": "TCK-9001",
+    "channel": "app_chat",
+    "customer_id": "C-44102",
+    "order_id": "MC-1048292",
+    "text": "My order says delivered an hour ago but nothing was left at my door. Help.",
+    "priority": "high"
+  },
+  {
+    "ticket_id": "TCK-9002",
+    "channel": "email",
+    "customer_id": "C-11887",
+    "order_id": "MC-1048301",
+    "text": "Can you change my pickup from 5pm to 7pm tomorrow?",
+    "priority": "low"
+  },
+  {
+    "ticket_id": "TCK-9003",
+    "channel": "store_ops",
+    "customer_id": null,
+    "order_id": "MC-1048310",
+    "text": "ATP shows 0 for organic milk SKU 884210 on pickup order due in 90 minutes. Need substitute guidance.",
+    "priority": "high"
+  },
+  {
+    "ticket_id": "TCK-9004",
+    "channel": "app_chat",
+    "customer_id": "C-99210",
+    "order_id": "MC-1048277",
+    "text": "I want a full refund of $214.55 because two items arrived melted.",
+    "priority": "high"
+  },
+  {
+    "ticket_id": "TCK-9005",
+    "channel": "internal_batch",
+    "customer_id": null,
+    "order_id": null,
+    "text": "Nightly: recompute loyalty points for segment WEST-14.",
+    "priority": "batch"
+  },
+  {
+    "ticket_id": "TCK-9006",
+    "channel": "app_chat",
+    "customer_id": "C-33001",
+    "order_id": "MC-1048199",
+    "text": "What's Meridian's policy on late grocery delivery credits?",
+    "priority": "medium"
+  }
+]
