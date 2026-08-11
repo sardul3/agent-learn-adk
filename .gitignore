@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+**/.env
+constraints-*.txt
+.DS_Store
+project/meridian_ops/audit/*.json
+project/meridian_ops/observability/trace_dumps/
+project/meridian_ops/runtime/checkpoints/
+project/meridian_ops/events/processed.json
+.mlflow/
+mlruns/
+*.egg-info/
+dist/
+build/
