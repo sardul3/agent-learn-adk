@@ -286,4 +286,4 @@ Put `RemoteA2aAgent` on the POLICY edge of `meridian_orderops` Workflow.
 **← Prev** [Lesson 16 — MCP & tool ecosystems](16-mcp-tool-ecosystems.md)  
 **Track home:** [README](../README.md)  
 **Native standard:** [NATIVE-ADK.md](../docs/NATIVE-ADK.md)  
-**Next pack:** Lesson 18 — Advanced RAG
+**Next:** [Lesson 18 — Advanced RAG for retail policy](18-advanced-rag-retail-policy.md)
