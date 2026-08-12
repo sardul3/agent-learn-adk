@@ -43,7 +43,7 @@ Frame → Design → Build → Secure → Evaluate → Judge → Track
 
 Suggested ops path: `12 → 41 → 32` (ship → release train → resilience).
 
-## Pack C — Orchestration depth & ecosystems *(writing now)*
+## Pack C — Orchestration depth & ecosystems ✅
 
 | # | Lesson | You leave able to… |
 |---|--------|--------------------|
@@ -53,25 +53,33 @@ Suggested ops path: `12 → 41 → 32` (ship → release train → resilience).
 | 16 | MCP & external tool ecosystems | Connect Meridian tools via MCP servers |
 | 17 | Event-driven agents & A2A | Webhooks, queues, agent-to-agent handoffs |
 
-## Pack D — Knowledge, models, multimodal
+## Pack D — Knowledge, models, multimodal ✅
 
-| # | Lesson | Theme |
+| # | Lesson | Theme | Status |
+|---|--------|--------|--------|
+| 18 | Advanced RAG for retail policy | Chunking, embeddings, hybrid retrieve, citations | ✅ |
+| 19 | Memory systems deep dive | Write policies, consolidation, PII boundaries | ✅ |
+| 20 | Model routing, fallbacks & structured output | Flash/Pro, JSON schema, graceful degrade | ✅ |
+| 21 | Multimodal OrderOps | POD photos, receipts, vision+tools | ✅ |
+| 22 | Streaming UX & progressive responses | Token streams, partial tool status | ✅ |
+
+## Pack E — Quality at scale & hard security ✅
+
+| # | Lesson | Theme | Status |
+|---|--------|--------|--------|
+| 23 | Red teaming & adversarial robustness | Injection suites, tool abuse, jailbreaks | ✅ |
+| 24 | Online monitoring & continuous eval | Sample prod → score → promote goldens | ✅ |
+| 25 | Human feedback, preferences & canary prompts | Label UIs, canary %, auto-rollback | ✅ |
+| 26 | Plugins, callbacks & policy middleware | Cross-cutting enforcement patterns | ✅ |
+| 27 | Privacy, retention & compliance | Redaction, TTL, audit, data subject requests | ✅ |
+
+**RAI bonus (after Pack E):**
+
+| # | Lesson | Status |
 |---|--------|--------|
-| 18 | Advanced RAG for retail policy | Chunking, embeddings, hybrid retrieve, citations |
-| 19 | Memory systems deep dive | Write policies, consolidation, PII boundaries |
-| 20 | Model routing, fallbacks & structured output | Flash/Pro, JSON schema, graceful degrade |
-| 21 | Multimodal OrderOps | POD photos, receipts, vision+tools |
-| 22 | Streaming UX & progressive responses | Token streams, partial tool status |
+| 42 | Responsible AI champion — scorecard, fixes, evidence pack | ✅ |
 
-## Pack E — Quality at scale & hard security
-
-| # | Lesson | Theme |
-|---|--------|--------|
-| 23 | Red teaming & adversarial robustness | Injection suites, tool abuse, jailbreaks |
-| 24 | Online monitoring & continuous eval | Sample prod → score → promote goldens |
-| 25 | Human feedback, preferences & canary prompts | Label UIs, canary %, auto-rollback |
-| 26 | Plugins, callbacks & policy middleware | Cross-cutting enforcement patterns |
-| 27 | Privacy, retention & compliance | Redaction, TTL, audit, data subject requests |
+Suggested quality path: `23 → 24 → 25 → 26 → 27 → 42`.
 
 ## Pack F — Platform engineering
 
@@ -118,4 +126,4 @@ You can do **all** of these unaided:
 
 ## Pack shipping cadence
 
-Write/teach **5 lessons at a time**. After Pack C: Pack D (18–22), etc.
+Write/teach **5 lessons at a time**. After Pack E (+ optional 42 RAI): Pack F (28–31; 32 already shipped), etc.

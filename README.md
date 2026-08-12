@@ -47,9 +47,10 @@ Customer ticket / ops alert
 | 11 | [Tracing & observability](lessons/11-tracing-observability.md) |
 | 12 | [Deployment & ops](lessons/12-deployment-ops.md) |
 
-**Ops depth (after Pack B):** [41 — CI/CD, canary, rollback & on-call](lessons/41-cicd-sre-deployment-ops.md) · [32 — Chaos, DR & feature flags](lessons/32-chaos-dr-feature-flags.md)
+**Ops depth (after Pack B):** [41 — CI/CD, canary, rollback & on-call](lessons/41-cicd-sre-deployment-ops.md) · [32 — Chaos, DR & feature flags](lessons/32-chaos-dr-feature-flags.md)  
+**RAI bonus (after Pack E):** [42 — Responsible AI champion](lessons/42-responsible-ai-champion.md)
 
-### Pack C — Orchestration depth & ecosystems *(current)*
+### Pack C — Orchestration depth & ecosystems ✅
 
 | # | Lesson | Theme |
 |---|--------|--------|
@@ -59,15 +60,29 @@ Customer ticket / ops alert
 | 16 | [MCP & tool ecosystems](lessons/16-mcp-tool-ecosystems.md) | MCP servers for Meridian tools |
 | 17 | [Event-driven & A2A](lessons/17-event-driven-a2a.md) | Webhooks, queues, agent-to-agent |
 
-### Pack D — Knowledge, models, multimodal *(next)*
+### Pack D — Knowledge, models, multimodal ✅
 
-18 Advanced RAG · 19 Memory deep · 20 Model routing/structured output · 21 Multimodal · 22 Streaming UX
+| # | Lesson | Theme |
+|---|--------|--------|
+| 18 | [Advanced RAG for retail policy](lessons/18-advanced-rag-retail-policy.md) | Chunk → embed → hybrid → cite |
+| 19 | [Memory systems deep dive](lessons/19-memory-systems-deep-dive.md) | ADK MemoryService + write policy |
+| 20 | [Model routing, fallbacks & structured output](lessons/20-model-routing-fallbacks-structured-output.md) | Flash/Pro, degrade, `output_schema` |
+| 21 | [Multimodal OrderOps](lessons/21-multimodal-orderops.md) | POD photos + vision + tools |
+| 22 | [Streaming UX & progressive responses](lessons/22-streaming-ux-progressive-responses.md) | ADK events → SSE for store ops |
 
-### Pack E — Quality at scale
+### Pack E — Quality at scale & hard security ✅
 
-23 Red teaming · 24 Online continuous eval · 25 Human feedback & canaries · 26 Plugins/middleware · 27 Privacy/compliance
+| # | Lesson | Theme |
+|---|--------|--------|
+| 23 | [Red teaming & adversarial robustness](lessons/23-red-teaming-adversarial-robustness.md) | Attack suites + ASR CI gates |
+| 24 | [Online monitoring & continuous eval](lessons/24-online-monitoring-continuous-eval.md) | Sample → score → promote goldens |
+| 25 | [Human feedback, preferences & canary prompts](lessons/25-human-feedback-canary-prompts.md) | Labels, prefs, canary rollback |
+| 26 | [Plugins, callbacks & policy middleware](lessons/26-plugins-callbacks-policy-middleware.md) | ADK `BasePlugin` enforcement |
+| 27 | [Privacy, retention & compliance](lessons/27-privacy-retention-compliance.md) | Redact, TTL, DSR export/delete |
 
-### Pack F — Platform engineering
+**RAI bonus:** [42 — Responsible AI champion](lessons/42-responsible-ai-champion.md) (scorecard → fixes → evidence pack)
+
+### Pack F — Platform engineering *(next)*
 
 28 Architecture catalog · 29 Sessions at scale · 30 Multi-tenant · 31 FinOps · [32 Chaos/DR/flags](lessons/32-chaos-dr-feature-flags.md) ✅
 
@@ -94,4 +109,7 @@ Customer ticket / ops alert
 ## Start
 
 - New → [Lesson 01](lessons/01-agentic-foundations.md)  
-- Finished Pack B → [Lesson 13](lessons/13-graph-workflows.md)
+- Finished Pack B → [Lesson 13](lessons/13-graph-workflows.md)  
+- Finished Pack C → [Lesson 18](lessons/18-advanced-rag-retail-policy.md)  
+- Finished Pack D → [Lesson 23](lessons/23-red-teaming-adversarial-robustness.md)  
+- Finished Pack E → [Lesson 42 — RAI bonus](lessons/42-responsible-ai-champion.md) (then Pack F in the roadmap)

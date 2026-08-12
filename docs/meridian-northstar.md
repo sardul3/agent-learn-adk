@@ -63,6 +63,7 @@ You are a software engineer on the **Customer Operations Platform** team. Leader
 | 17 | Event webhooks/queues + A2A policy handoff |
 | 18–22 | Advanced RAG, memory, model routing, multimodal, streaming |
 | 23–27 | Red team, online eval, canaries, middleware, privacy |
+| 42 | RAI champion — scorecard, compliant-ready changes, evidence pack |
 | 28–32 | Architecture catalog, sessions scale, multi-tenant, FinOps, chaos |
 | 33–37 | Teaching, ITSM, **dynamic agent platform**, governance |
 | 38–40 | Capstone trilogy (design / ship-debug / mentor) |
