@@ -42,7 +42,7 @@ If your only answer is “the model said so,” you do not have a product — yo
 | **Session** | Container for one ongoing conversation | Maya’s chat about `MC-1048292` |
 | **Turn** | One user message + agent work that follows | “What’s the status…” |
 | **State** | Mutable dict scratchpad for the session/run | `active_order_id`, `ticket_id` |
-| **Event / callback** | Hook around agent/model/tool lifecycle | Log when a run starts; redact before model call |
+| **Callback** | A Python function **ADK always runs** at a known moment (before the agent, model, or tool) | Stamp a log every time Order Status starts a turn |
 | **Artifact** | Named blob tied to the session | Saved OMS snapshot JSON for audit |
 | **Runner** | Programmatic entrypoint to invoke an agent | Unit/integration tests without the web UI |
 
@@ -310,18 +310,60 @@ In `adk web`, **same session**, run:
 
 ### Why
 
-Callbacks are how you add observability and guardrails without stuffing more prose into the instruction.
+Priya (CX supervisor) asks:
+
+> “How many times did this chat look at Maya’s order?”
+
+You cannot put that count in the **instruction**. The model might forget, skip it, or invent a number.
+
+You cannot make a **tool** called `log_run` and hope the model calls it. Tools are optional — the model chooses.
+
+You need something that runs in **your Python**, every turn, **before** the model even starts thinking. That is a **callback**.
+
+### Picture this: the store punch clock
+
+When Devon clocks in at Store 441, the time clock stamps `Devon started 09:02` **before** he stocks a single shelf.
+
+Devon does not write that stamp himself. If he did, he would forget on a busy morning. The clock is wired into the door.
+
+A callback is that time clock for your agent:
+
+```
+You send a message in adk web
+        │
+        ▼
+  before_agent_callback     ← YOUR Python always runs here
+  (stamp run_count, print a log)
+        │
+        ▼
+  Model thinks / may call get_order
+        │
+        ▼
+  Agent replies in the browser
+```
+
+| Approach | Who runs it? | Can it skip? |
+|----------|--------------|--------------|
+| Write “please count your runs” in the instruction | The model | Yes — models drop rules |
+| Add a `log_run` tool | The model, if it decides to call it | Yes |
+| `before_agent_callback` | ADK, every turn, before the model | **No** — that is the point |
+
+Today you add the punch clock. You prove it fired in two places: the **terminal** (a log line) and **session state** (`run_count`).
 
 ### Do this
 
-Add a before-agent callback that records a run counter in state and prints a single structured log line:
+1. Open `project/meridian_order_status/agent.py`. Add these imports near the top (with the other imports):
 
 ```python
 import json
 from datetime import datetime, timezone
+```
 
+2. Add this function **above** `root_agent = Agent(...)`. It is ordinary Python. ADK will call it for you.
 
+```python
 def before_agent_callback(callback_context):
+    """Stamp a run counter before the model starts. Return None = keep going."""
     runs = int(callback_context.state.get("run_count", 0)) + 1
     callback_context.state["run_count"] = runs
     callback_context.state["last_run_at"] = datetime.now(timezone.utc).isoformat()
@@ -338,22 +380,82 @@ def before_agent_callback(callback_context):
     return None
 ```
 
-Wire it into the agent using the parameter name your installed ADK version expects for before-agent hooks (commonly `before_agent_callback=` on `Agent` / `LlmAgent`). If your version’s signature differs, run:
+   - `callback_context` is ADK’s handle for this turn. Same idea as `tool_context` in Task 3, but it runs **before** any tool.
+   - `callback_context.state` is the **same session state** you wrote `active_order_id` into.
+   - `return None` means “I only stamped the clock — let the agent continue.”
 
-```bash
-python -c "from google.adk.agents.llm_agent import Agent; import inspect; print(inspect.signature(Agent.__init__))"
+3. Wire it on the agent. Add **one line** to the existing `Agent(...)` call:
+
+```python
+root_agent = Agent(
+    name="meridian_order_status",
+    model="gemini-2.5-flash",
+    description="Meridian WISMO agent with session-aware order lookup.",
+    instruction=POLICY
+    + """
+
+Session rules:
+- After a successful get_order, active_order_id is stored in state.
+- If the user says "that order" or omits the id, call recall_active_order, then get_order.
+""".strip(),
+    tools=[get_order, recall_active_order],
+    before_agent_callback=before_agent_callback,  # punch clock: runs before every turn
+)
 ```
 
-…and bind the callback to the matching kwarg. Do not invent a second agent framework — adapt to the installed ADK.
+   The left side (`before_agent_callback=`) is the ADK hook name. The right side is **your** function. They happen to share a name; that is fine.
 
-Re-run two turns in `adk web` while watching the terminal where `adk web` is running.
+4. Restart `adk web` so it reloads `agent.py`. In the terminal where it is already running:
+
+   - Press `Ctrl+C` to stop it (`C` = cancel the running process).
+   - Start it again:
+
+```bash
+cd /Users/alishaghatane/dev/agent-learn-sme/project
+source ../.venv/bin/activate
+export PYTHONPATH=.
+adk web --port 8000
+```
+
+   `--port 8000` keeps the UI on the same URL you already have open.
+
+5. Restarting `adk web` starts a **fresh** session (in-memory state does not survive the restart). Open the UI and send two messages in **one** chat:
+
+   1. `Status for MC-1048292?`
+   2. `Any POD photo on that order?`
+
+6. Prove it fired — look in **two** places:
+
+   - **Terminal** (the window where `adk web` is running — **not** the browser chat).
+   - **Session state** in the `adk web` UI (the state / session panel).
 
 ### Expect
 
-- Two JSON lines with `run_count` 1 then 2  
-- `active_order_id` present on the second line after Task 3
+**Terminal** — two JSON lines, one per turn:
 
-> **Tip:** Callbacks are ideal for correlation IDs, redaction, and “deny before model” checks. Lesson 07 will harden this.
+```json
+{"event": "before_agent", "agent": "meridian_order_status", "run_count": 1, "active_order_id": null}
+{"event": "before_agent", "agent": "meridian_order_status", "run_count": 2, "active_order_id": "MC-1048292"}
+```
+
+- Turn 1: `run_count` is `1`. `active_order_id` is `null` on that first stamp — the callback runs **before** `get_order` writes the id.
+- Turn 2: `run_count` is `2`. `active_order_id` is `MC-1048292` because turn 1 already stored it.
+
+**Session state** after turn 2:
+
+- `run_count` is `2`
+- `last_run_at` is an ISO timestamp
+- `active_order_id` is still `MC-1048292`
+
+If both of those match, the punch clock is real. You did not ask the model to log anything.
+
+> **Tip:** Later lessons use the same hook to **stop** a run (return a canned reply instead of `None`) — for example, deny a refund before the model ever sees it. Today you only prove the hook fires.
+
+> **Watch out:** The argument **must** be named `callback_context`. ADK passes it by that name. If you rename it to `ctx`, you get a `TypeError` at runtime.
+
+> **Watch out:** `print(...)` goes to the **terminal**, not the chat bubble. If the browser looks unchanged, that is expected — look at the process that launched `adk web`.
+
+> **Watch out:** A new session resets state. `run_count` starts at `1` again. That is correct: the punch clock is per conversation, not global.
 
 ---
 
@@ -436,7 +538,10 @@ from google.adk.sessions import InMemorySessionService
 |---------|--------------|-----|
 | `No module named meridian_ops` | `PYTHONPATH` not including `project` | `export PYTHONPATH=.` from `project/` |
 | State “forgotten” each message | New session in UI | Stay in the same chat thread |
-| Callback never prints | Not wired / wrong kwarg for your ADK version | Inspect `Agent` signature; confirm process stdout |
+| No JSON in the browser chat | Callbacks `print` to the `adk web` process, not the UI | Watch the terminal that launched `adk web` |
+| Callback never prints | Not passed into `Agent(...)`, or `adk web` not restarted | Add `before_agent_callback=before_agent_callback`; restart `adk web` |
+| `TypeError` / missing `callback_context` | Parameter renamed from `callback_context` | The argument must be named exactly `callback_context` |
+| `run_count` resets to 1 on the next message | New session in the UI | Stay in the same chat thread |
 | Artifact save errors | Missing async / artifact service in a custom Runner | Use `adk web` first; wire ArtifactService when using Runner |
 | Model still invents POD | Instruction soft; no tool evidence rule | Require snapshot + explicit “never invent POD” |
 
@@ -447,7 +552,7 @@ from google.adk.sessions import InMemorySessionService
 - [ ] OMS fixture + `get_order` unit tests pass
 - [ ] `policy.md` exists and matches agent instruction structure
 - [ ] Multi-turn session reuses `active_order_id`
-- [ ] You observed a callback log line with `run_count`
+- [ ] Same session, two turns: terminal shows `run_count` 1 then 2, and state shows `run_count: 2`
 - [ ] Delivered-without-POD path saves an artifact
 
 ---
@@ -458,7 +563,7 @@ from google.adk.sessions import InMemorySessionService
 2. What is the difference between session **state** and an **artifact** here?  
 3. Why put refusals near the top of the instruction?  
 4. What must be true before the agent claims `delivered_at_local`?  
-5. Give one callback use case that should *not* live in the instruction text.
+5. Why is a run counter a callback, not an instruction or a tool? After two turns in the **same** session, what is `run_count`?
 
 ### Answers
 
@@ -466,7 +571,7 @@ from google.adk.sessions import InMemorySessionService
 2. State = small keys for control flow; artifact = the JSON blob for audit/handoff.  
 3. Under long contexts/tool noise, trailing rules get ignored more often.  
 4. A successful `get_order` (tool evidence) containing that field.  
-5. Emitting structured logs / redacting secrets / hard-deny on banned tools.
+5. ADK always runs the callback; the model can skip an instruction or a tool. `run_count` is `2`.
 
 ---
 
