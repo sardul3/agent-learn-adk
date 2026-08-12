@@ -7,13 +7,20 @@ from typing import Any
 _ORDERS_PATH = Path(__file__).resolve().parents[1] / "fixtures" / "orders.json"
 
 
+def _load_orders() -> dict[str, dict[str, Any]]:
+    return json.loads(_ORDERS_PATH.read_text())
+
+
 def get_order(order_id: str) -> dict[str, Any]:
     """Look up a Meridian order in OMS (fixture-backed).
 
     Args:
         order_id: Meridian order id, for example MC-1048292.
+
+    Returns:
+        status=success with order, or status=error with error_code.
     """
-    orders = json.loads(_ORDERS_PATH.read_text())
+    orders = _load_orders()
     order = orders.get(order_id.strip())
     if not order:
         return {
