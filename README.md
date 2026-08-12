@@ -11,6 +11,7 @@ Every lesson advances **Meridian Commerce OrderOps** (Walmart/Kroger/Amazon-scal
 | [docs/gap-analysis-sme.md](docs/gap-analysis-sme.md) | Why the expanded track exists |
 | [docs/meridian-northstar.md](docs/meridian-northstar.md) | Product brief |
 | [docs/NATIVE-ADK.md](docs/NATIVE-ADK.md) | **Use ADK natively — no DIY runtimes** |
+| `cd learn && npm run dev` | **Study site** (VitePress) — read lessons without the lab tree |
 
 ```
 Customer ticket / ops alert
@@ -106,9 +107,23 @@ Customer ticket / ops alert
 - Docker for Lesson 12+  
 - Pack C assumes Pack A+B concepts (graph labs can use stubs if your agents are mid-build)
 
+## Study in the browser (VitePress)
+
+Lessons stay in `lessons/*.md`. A small converter in `learn/` turns them into a local (and GitHub Pages) site so you can read, search, and track progress without keeping the lab tree open.
+
+```sh
+cd learn
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. Saving a lesson reloads the page. See [learn/study.md](learn/study.md) for search, progress, and Pages setup.
+
+**GitHub Pages:** Settings → Pages → Source = GitHub Actions. After the `Deploy Meridian Learn` workflow runs: `https://sardul3.github.io/agent-learn-adk/`.
+
 ## Start
 
-- New → [Lesson 01](lessons/01-agentic-foundations.md)  
+- New → [Lesson 01](lessons/01-agentic-foundations.md) (or the [study site](https://sardul3.github.io/agent-learn-adk/lessons/01-agentic-foundations))
 - Finished Pack B → [Lesson 13](lessons/13-graph-workflows.md)  
 - Finished Pack C → [Lesson 18](lessons/18-advanced-rag-retail-policy.md)  
 - Finished Pack D → [Lesson 23](lessons/23-red-teaming-adversarial-robustness.md)  

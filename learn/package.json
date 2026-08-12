@@ -1,0 +1,15 @@
+{
+  "name": "meridian-learn",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync-lessons.mjs",
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.18"
+  }
+}

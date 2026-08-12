@@ -15,3 +15,9 @@ mlruns/
 *.egg-info/
 dist/
 build/
+node_modules/
+learn/.vitepress/cache/
+learn/.vitepress/dist/
+learn/lessons/[0-9]*.md
+learn/reference/*
+!learn/reference/index.md

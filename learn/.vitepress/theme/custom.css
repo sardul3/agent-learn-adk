@@ -1,0 +1,407 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+:root {
+  --vp-font-family-base: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --vp-font-family-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --display: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif;
+  --scan: #c45c12;
+  --lane: #1f7a74;
+  --ticket-bg: #eef2ea;
+  --ticket-edge: #c5d0c8;
+  --vp-c-brand-1: #1f7a74;
+  --vp-c-brand-2: #186660;
+  --vp-c-brand-3: #2a9b8f;
+  --vp-c-brand-soft: rgba(31, 122, 116, 0.12);
+  --vp-c-bg: #f3f5f2;
+  --vp-c-bg-alt: #e6ebe4;
+  --vp-c-bg-elv: #fafbf8;
+  --vp-c-bg-soft: #e6ebe4;
+  --vp-c-text-1: #1a242e;
+  --vp-c-text-2: #3d4a55;
+  --vp-c-divider: #c5d0c8;
+  --vp-c-gutter: #d7dfd6;
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(90deg, #1f7a74 0%, #c45c12 100%);
+  --vp-button-brand-bg: #1f7a74;
+  --vp-button-brand-hover-bg: #186660;
+  --vp-button-brand-active-bg: #14544f;
+  --vp-sidebar-bg-color: #eef2ea;
+  --vp-code-color: #1a242e;
+}
+
+.dark {
+  --scan: #ff8a3d;
+  --lane: #7cdbd5;
+  --ticket-bg: #1c232c;
+  --ticket-edge: #2c3642;
+  --vp-c-brand-1: #7cdbd5;
+  --vp-c-brand-2: #5ec9c2;
+  --vp-c-brand-3: #2a9b8f;
+  --vp-c-brand-soft: rgba(124, 219, 213, 0.12);
+  --vp-c-bg: #12161c;
+  --vp-c-bg-alt: #181e26;
+  --vp-c-bg-elv: #1c232c;
+  --vp-c-bg-soft: #181e26;
+  --vp-c-text-1: #d7dde4;
+  --vp-c-text-2: #9aa6b2;
+  --vp-c-divider: #2c3642;
+  --vp-c-gutter: #0e1218;
+  --vp-button-brand-bg: #2a9b8f;
+  --vp-button-brand-hover-bg: #1f7a74;
+  --vp-sidebar-bg-color: #181e26;
+  --vp-code-color: #d7dde4;
+}
+
+/* min-light comments (#c2c3c5) and ocean comments (#464B5D) fail contrast. */
+html:not(.dark) .vp-code span[style*='#c2c3c5' i] {
+  --shiki-light: #3d4a55;
+}
+
+.dark .vp-code span[style*='#464B5D' i] {
+  --shiki-dark: #9aa6b2;
+}
+
+.VPNavBarTitle .title,
+.VPHero .name,
+.VPHero .text,
+.vp-doc h1,
+.vp-doc h2 {
+  font-family: var(--display);
+  letter-spacing: -0.03em;
+}
+
+.VPHero .text {
+  max-width: 18ch;
+}
+
+.VPHero .image-container {
+  transform: none;
+}
+
+.VPHero .image-bg {
+  display: none;
+}
+
+.lane-ticket {
+  position: relative;
+  margin: 0 0 1.75rem;
+  padding: 1rem 1.35rem 1rem 1.6rem;
+  background: var(--ticket-bg);
+  border: 1px solid var(--ticket-edge);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--scan) 35%, transparent);
+}
+
+.lane-ticket::before,
+.lane-ticket::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  background: radial-gradient(circle at 5px 10px, var(--vp-c-bg) 4px, transparent 4.5px)
+    0 6px / 10px 14px;
+  pointer-events: none;
+}
+
+.lane-ticket::before {
+  left: -1px;
+}
+
+.lane-ticket::after {
+  right: -1px;
+  transform: scaleX(-1);
+}
+
+.lane-ticket__stub {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--scan);
+  margin-bottom: 0.85rem;
+}
+
+.lane-ticket__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem 1.25rem;
+  margin: 0;
+}
+
+.lane-ticket__fields dt {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--vp-c-text-2);
+}
+
+.lane-ticket__fields dd {
+  margin: 0.15rem 0 0;
+  font-size: 0.92rem;
+}
+
+.lane-ticket__wide {
+  grid-column: 1 / -1;
+}
+
+.wave-progress {
+  margin: 0 0 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--vp-c-divider);
+}
+
+.wave-progress__kicker,
+.floor-meter small,
+.continue-lane span,
+.pack-board__head em,
+.lane-404__kicker {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--scan);
+}
+
+.wave-progress__count {
+  margin: 0.2rem 0 0.55rem;
+  font-family: var(--display);
+  font-size: 1.05rem;
+}
+
+.wave-progress__rail {
+  height: 4px;
+  background: var(--vp-c-divider);
+  margin-bottom: 0.75rem;
+}
+
+.wave-progress__fill {
+  display: block;
+  height: 100%;
+  background: var(--lane);
+}
+
+.wave-progress__btn,
+.mark-complete__btn {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--lane);
+  background: transparent;
+  color: var(--vp-c-text-1);
+  cursor: pointer;
+}
+
+.wave-progress__btn:hover,
+.mark-complete__btn:hover,
+.mark-complete__btn[data-done='true'] {
+  background: var(--vp-c-brand-soft);
+}
+
+.wave-progress__hint {
+  margin: 0.55rem 0 0;
+  font-size: 0.78rem;
+  color: var(--vp-c-text-2);
+}
+
+.mark-complete {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--vp-c-divider);
+}
+
+.mark-complete__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.25rem;
+  align-items: center;
+}
+
+.mark-complete__next {
+  font-family: var(--display);
+}
+
+.continue-lane {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 2.5rem 0 0;
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--scan);
+  background: var(--vp-c-bg-soft);
+}
+
+.continue-lane a {
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.pack-board {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.pack-board__wave {
+  position: relative;
+  padding: 1rem 1rem 1rem 1.35rem;
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg-elv);
+}
+
+.pack-board__wave::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--lane);
+}
+
+.pack-board__head {
+  display: flex;
+  gap: 0.85rem;
+  align-items: baseline;
+  text-decoration: none;
+  color: inherit;
+}
+
+.pack-board__head strong {
+  display: block;
+  font-family: var(--display);
+  font-size: 1.15rem;
+}
+
+.pack-board__letter {
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.85rem;
+  color: var(--scan);
+  min-width: 2.4rem;
+}
+
+.pack-board__list {
+  list-style: none;
+  padding: 0.75rem 0 0 3.25rem;
+  margin: 0;
+}
+
+.pack-board__list a {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+  text-decoration: none;
+  color: var(--vp-c-text-1);
+}
+
+.pack-board__list a span {
+  font-family: var(--vp-font-family-mono);
+  color: var(--vp-c-text-2);
+}
+
+.pack-board__list a.is-done {
+  color: var(--vp-c-text-2);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.pack-board__empty {
+  margin: 0.75rem 0 0 3.25rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.92rem;
+}
+
+.floor-meter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  margin: 0 0.4rem 0 0;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.78rem;
+  color: var(--vp-c-text-2);
+}
+
+.floor-meter span {
+  color: var(--scan);
+  font-weight: 500;
+}
+
+.lane-hero {
+  width: min(100%, 420px);
+  height: auto;
+  overflow: visible;
+}
+
+.lane-hero__sheet {
+  fill: var(--ticket-bg);
+  stroke: var(--ticket-edge);
+}
+
+.lane-hero__mono,
+.lane-hero__body,
+.lane-hero__dim,
+.lane-hero__cta {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px;
+  fill: var(--vp-c-text-1);
+}
+
+.lane-hero__dim {
+  fill: var(--vp-c-text-2);
+}
+
+.lane-hero__cta {
+  fill: var(--scan);
+  text-decoration: underline;
+}
+
+.lane-hero__rule,
+.lane-hero__flow {
+  stroke: var(--lane);
+  fill: none;
+}
+
+.lane-hero__node,
+.lane-hero__chip {
+  fill: transparent;
+  stroke: var(--scan);
+}
+
+.lane-404 {
+  max-width: 36rem;
+  margin: 18vh auto;
+  padding: 0 1.5rem;
+}
+
+.lane-404 h1 {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  line-height: 1.15;
+  margin: 0.35rem 0 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .lane-ticket__fields {
+    grid-template-columns: 1fr;
+  }
+
+  .pack-board__list,
+  .pack-board__empty {
+    padding-left: 0;
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}
