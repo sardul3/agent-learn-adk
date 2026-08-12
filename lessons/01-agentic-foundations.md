@@ -21,6 +21,8 @@ By the end you can explain, without hand-waving:
 
 ---
 
+
+
 ## Why this matters
 
 Meridian’s CX leadership wants “an AI agent for customer ops.”
@@ -35,29 +37,35 @@ Your job as the SWE is to **frame the problem** before picking a framework.
 
 ---
 
+
+
 ## Know these
 
 Read this section fully before Task 1. Every later lesson reuses these words.
 
-| Term | Plain English | Meridian example |
-|------|---------------|------------------|
-| **LLM** | A model that predicts the next tokens of text | Gemini drafting a customer-safe status update |
-| **Token** | A chunk of text the model reads/writes; bills and context limits are in tokens | Order JSON + chat history consuming the context window |
-| **Context window** | Max tokens the model can see in one call | Too much history → older turns get dropped or summarized |
-| **Temperature** | How “spiky” sampling is; higher = more varied | Low temp for refund decisions; higher for marketing copy (not our domain) |
-| **Tool calling** | Model emits a structured request to run a function you defined | `get_order(order_id="MC-1048292")` |
-| **Hallucination** | Confident false statement | Inventing a delivery scan that never happened |
-| **Agent** | Loop that observes, reasons, optionally calls tools, observes results, repeats until done | OrderOps resolving a WISMO ticket |
-| **Script** | Fixed code path; no model choosing steps | Nightly loyalty recompute job |
-| **Workflow** | Explicit graph/sequence of steps (some may be LLM nodes) | Refund: validate → policy check → HITL → settle |
-| **RAG** | Retrieve documents, then answer grounded in them | Pull late-delivery policy before answering Maya |
-| **Trajectory** | The full path: messages + tool calls + args + results + stop reason | What you debug in production — not only the final paragraph |
-| **HITL** | Human-in-the-loop: approve, edit, escalate, pause/resume | Priya approves refunds over $75 |
-| **Idempotent tool** | Safe to retry; same logical request doesn’t double-apply side effects | Refund with idempotency key doesn’t charge twice |
-| **State** | Scratchpad for *this* session/run (mutable dict) | `order_id`, `refund_candidate_usd` |
-| **Memory** | Longer-lived facts across sessions | “Maya prefers contact by SMS” |
-| **Artifact** | Named file/blob produced or consumed | PDF packing slip, CSV of shorted SKUs |
-| **Transcript** | The conversation turns themselves | Chat bubbles in `adk web` |
+
+| Term                | Plain English                                                                             | Meridian example                                                          |
+| ------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **LLM**             | A model that predicts the next tokens of text                                             | Gemini drafting a customer-safe status update                             |
+| **Token**           | A chunk of text the model reads/writes; bills and context limits are in tokens            | Order JSON + chat history consuming the context window                    |
+| **Context window**  | Max tokens the model can see in one call                                                  | Too much history → older turns get dropped or summarized                  |
+| **Temperature**     | How “spiky” sampling is; higher = more varied                                             | Low temp for refund decisions; higher for marketing copy (not our domain) |
+| **Tool calling**    | Model emits a structured request to run a function you defined                            | `get_order(order_id="MC-1048292")`                                        |
+| **Hallucination**   | Confident false statement                                                                 | Inventing a delivery scan that never happened                             |
+| **Agent**           | Loop that observes, reasons, optionally calls tools, observes results, repeats until done | OrderOps resolving a WISMO ticket                                         |
+| **Script**          | Fixed code path; no model choosing steps                                                  | Nightly loyalty recompute job                                             |
+| **Workflow**        | Explicit graph/sequence of steps (some may be LLM nodes)                                  | Refund: validate → policy check → HITL → settle                           |
+| **RAG**             | Retrieve documents, then answer grounded in them                                          | Pull late-delivery policy before answering Maya                           |
+| **Trajectory**      | The full path: messages + tool calls + args + results + stop reason                       | What you debug in production — not only the final paragraph               |
+| **HITL**            | Human-in-the-loop: approve, edit, escalate, pause/resume                                  | Priya approves refunds over $75                                           |
+| **Idempotent tool** | Safe to retry; same logical request doesn’t double-apply side effects                     | Refund with idempotency key doesn’t charge twice                          |
+| **State**           | Scratchpad for *this* session/run (mutable dict)                                          | `order_id`, `refund_candidate_usd`                                        |
+| **Memory**          | Longer-lived facts across sessions                                                        | “Maya prefers contact by SMS”                                             |
+| **Artifact**        | Named file/blob produced or consumed                                                      | PDF packing slip, CSV of shorted SKUs                                     |
+| **Transcript**      | The conversation turns themselves                                                         | Chat bubbles in `adk web`                                                 |
+
+
+
 
 ### The agent loop
 
@@ -74,17 +82,23 @@ You **mix** deterministic code (tools, validators, graphs) with probabilistic de
 
 ### Decision cheatsheet
 
-| Pattern | Use when… | Meridian example |
-|---------|-----------|------------------|
-| **Script / job** | Inputs known; steps fixed; no judgment | Loyalty recompute for segment WEST-14 |
-| **Workflow (mostly deterministic)** | Order of steps must be guaranteed; LLM optional at nodes | Refund settlement after supervisor approval |
-| **RAG-only chat** | Question answered from docs; no side effects | “What’s the late delivery credit policy?” |
-| **Single agent + tools** | Multi-step judgment + system reads/writes; one specialty | Order status investigation |
-| **Multi-agent** | Distinct skills, prompts, or privilege boundaries | Order vs Inventory vs Refund specialists |
+
+| Pattern                             | Use when…                                                | Meridian example                                           |
+| ----------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------- |
+| **Script / job**                    | Inputs known; steps fixed; no judgment                   | Loyalty recompute for segment WEST-14 at midnight everyday |
+| **Workflow (mostly deterministic)** | Order of steps must be guaranteed; LLM optional at nodes | Refund settlement after supervisor approval                |
+| **RAG-only chat**                   | Question answered from docs; no side effects             | “What’s the late delivery credit policy?”                  |
+| **Single agent + tools**            | Multi-step judgment + system reads/writes; one specialty | Order status investigation                                 |
+| **Multi-agent**                     | Distinct skills, prompts, or privilege boundaries        | Order vs Inventory vs Refund specialists                   |
+
 
 ---
 
+
+
 ## Task 1 — Inventory the Meridian ticket batch
+
+
 
 ### Why
 
@@ -99,16 +113,20 @@ cd /Users/alishaghatane/dev/agent-learn-sme
 cat project/meridian_ops/fixtures/tickets.json
 ```
 
-2. Create a working notes file (you will commit this later if you want):
+1. Create a working notes file (you will commit this later if you want):
 
 ```bash
 mkdir -p project/meridian_ops/decisions
 ```
 
-3. Create `project/meridian_ops/decisions/01-ticket-routing.md` and fill a table with **one row per ticket**:
+1. Create `project/meridian_ops/decisions/01-ticket-routing.md` and fill a table with **one row per ticket**:
+
 
 | ticket_id | Pattern (script / workflow / RAG / single-agent / multi-agent) | Why (one sentence) | Side effects? | HITL? |
-|-----------|----------------------------------------------------------------|--------------------|---------------|-------|
+| --------- | -------------------------------------------------------------- | ------------------ | ------------- | ----- |
+
+
+
 
 ### Expect
 
@@ -123,7 +141,11 @@ mkdir -p project/meridian_ops/decisions
 
 ---
 
+
+
 ## Task 2 — Build a deterministic ticket classifier (no LLM)
+
+
 
 ### Why
 
@@ -139,7 +161,7 @@ touch project/meridian_ops/__init__.py
 touch project/meridian_ops/tools/__init__.py
 ```
 
-2. Add `project/meridian_ops/tools/classify_ticket.py`:
+1. Add `project/meridian_ops/tools/classify_ticket.py`:
 
 ```python
 from __future__ import annotations
@@ -183,7 +205,7 @@ def classify_ticket(text: str, channel: str | None = None) -> Route:
     return Route.SINGLE_AGENT
 ```
 
-3. Add `project/meridian_ops/tests/test_classify_ticket.py`:
+1. Add `project/meridian_ops/tests/test_classify_ticket.py`:
 
 ```python
 import json
@@ -218,16 +240,18 @@ def test_policy_question_is_rag():
     assert classify_ticket(pol["text"], pol["channel"]) == Route.RAG
 ```
 
-4. From the repo root, run:
+1. From the repo root, run:
 
 ```bash
 cd /Users/alishaghatane/dev/agent-learn-sme
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -q pytest
 export PYTHONPATH=project
 pytest project/meridian_ops/tests/test_classify_ticket.py -v
 ```
+
+
 
 ### Expect
 
@@ -241,7 +265,11 @@ If a test fails, fix the classifier or your reading of the ticket — do **not**
 
 ---
 
+
+
 ## Task 3 — Design three tools on paper-that-runs (schemas)
+
+
 
 ### Why
 
@@ -389,6 +417,8 @@ export PYTHONPATH=project
 pytest project/meridian_ops/tests/test_tool_contracts.py -v
 ```
 
+
+
 ### Expect
 
 All tests pass. Notice the pattern:
@@ -401,7 +431,11 @@ All tests pass. Notice the pattern:
 
 ---
 
+
+
 ## Task 4 — Failure-mode hunt (trajectory thinking)
+
+
 
 ### Why
 
@@ -411,13 +445,15 @@ SMEs debug trajectories. Demo builders only read the final message.
 
 In `project/meridian_ops/decisions/01-ticket-routing.md`, add a section **Failure modes** and map each risk to a Meridian scenario + a mitigation you control in code:
 
-| Failure mode | Meridian scenario | Mitigation you own |
-|--------------|-------------------|--------------------|
-| Infinite loop | Model keeps calling `get_order` with same id | Max steps / stop condition |
-| Tool thrash | Alternating substitute SKUs | Deterministic ranking tool |
-| Context bloat | Pasting full OMS JSON every turn | Summarize; store ids in state |
-| Silent wrong answer | Invented POD (proof of delivery) scan | Require tool evidence before claiming |
-| Unauthorized side effect | $214 refund without Priya | HITL gate + tool-level threshold |
+
+| Failure mode             | Meridian scenario                            | Mitigation you own                    |
+| ------------------------ | -------------------------------------------- | ------------------------------------- |
+| Infinite loop            | Model keeps calling `get_order` with same id | Max steps / stop condition            |
+| Tool thrash              | Alternating substitute SKUs                  | Deterministic ranking tool            |
+| Context bloat            | Pasting full OMS JSON every turn             | Summarize; store ids in state         |
+| Silent wrong answer      | Invented POD (proof of delivery) scan        | Require tool evidence before claiming |
+| Unauthorized side effect | $214 refund without Priya                    | HITL gate + tool-level threshold      |
+
 
 Fill the **Mitigation** column in your own words (not copy-paste only).
 
@@ -427,39 +463,53 @@ Every row has a mitigation that is **engineering**, not “prompt the model to b
 
 ---
 
+
+
 ## How it works (deeper dive)
+
+
 
 ### Deterministic vs probabilistic — the mix
 
-| Layer | Prefer | Why |
-|-------|--------|-----|
-| AuthZ, money, inventory writes | Deterministic code | Auditors and ledgers hate vibes |
-| Choosing which investigation step is next | Probabilistic (LLM) | Language + partial evidence |
-| Output shape to the customer | Constrained (schema / template) | CX tone + legal disclaimers |
+
+| Layer                                     | Prefer                          | Why                             |
+| ----------------------------------------- | ------------------------------- | ------------------------------- |
+| AuthZ, money, inventory writes            | Deterministic code              | Auditors and ledgers hate vibes |
+| Choosing which investigation step is next | Probabilistic (LLM)             | Language + partial evidence     |
+| Output shape to the customer              | Constrained (schema / template) | CX tone + legal disclaimers     |
+
+
+
 
 ### Evaluation mindset
 
 A “good” run for `TCK-9001` is not a warm apology. It is a trajectory like:
 
-1. `get_order(MC-1048292)`  
-2. `get_delivery_events(MC-1048292)`  
-3. Decide missing POD → open case / offer steps  
-4. Stop with citations to tool results  
+1. `get_order(MC-1048292)`
+2. `get_delivery_events(MC-1048292)`
+3. Decide missing POD → open case / offer steps
+4. Stop with citations to tool results
 
 If step 2 never happened, the prose is untrusted — even if it sounds perfect.
 
 ---
 
+
+
 ## Common pitfalls / troubleshooting
 
-| Symptom | Likely cause | Fix |
-|---------|--------------|-----|
-| `ModuleNotFoundError: meridian_ops` | `PYTHONPATH` not set | `export PYTHONPATH=project` from repo root |
-| Classifier marks refund as `single_agent` | Regex too weak | Extend `_REFUND`; keep tests green |
-| You want to call Gemini already | Eager framework energy | Finish Task 4; Lesson 02 installs ADK |
-| Decision doc says “multi-agent” for everything | Overfitting to the cool pattern | Re-read the cheatsheet; prefer simpler |
+
+| Symptom                                        | Likely cause                    | Fix                                        |
+| ---------------------------------------------- | ------------------------------- | ------------------------------------------ |
+| `ModuleNotFoundError: meridian_ops`            | `PYTHONPATH` not set            | `export PYTHONPATH=project` from repo root |
+| Classifier marks refund as `single_agent`      | Regex too weak                  | Extend `_REFUND`; keep tests green         |
+| You want to call Gemini already                | Eager framework energy          | Finish Task 4; Lesson 02 installs ADK      |
+| Decision doc says “multi-agent” for everything | Overfitting to the cool pattern | Re-read the cheatsheet; prefer simpler     |
+
 
 ---
+
+
 
 ## You are done when
 
@@ -469,6 +519,8 @@ If step 2 never happened, the prose is untrusted — even if it sounds perfect.
 - [ ] You can defend why `TCK-9005` must not be an agent
 
 ---
+
+
 
 ## Knowledge check
 
@@ -480,15 +532,19 @@ Answer before peeking. Prefer writing answers in your decision doc.
 4. Why do trajectories matter more than final prose for Meridian refunds?
 5. Give one case where RAG-only is enough — and one where RAG alone is dangerous.
 
+
+
 ### Answers
 
-1. Steps and inputs are known (batch recompute); no tool-judgment loop; an agent adds cost and nondeterminism with no upside.  
-2. Retries with the same `idempotency_key` must not create a second payout.  
-3. State: `order_id` / `requires_hitl`. Artifact: packing-slip PDF or shorted-SKU CSV.  
-4. Finance and CX care whether policy tools ran and whether HITL fired — not whether the goodbye was friendly.  
+1. Steps and inputs are known (batch recompute); no tool-judgment loop; an agent adds cost and nondeterminism with no upside.
+2. Retries with the same `idempotency_key` must not create a second payout.
+3. State: `order_id` / `requires_hitl`. Artifact: packing-slip PDF or shorted-SKU CSV.
+4. Finance and CX care whether policy tools ran and whether HITL fired — not whether the goodbye was friendly.
 5. Enough: policy FAQ with no side effects. Dangerous: answering “we refunded you” from a policy doc without calling payments.
 
 ---
+
+
 
 ## Recap
 
@@ -498,11 +554,15 @@ Answer before peeking. Prefer writing answers in your decision doc.
 
 ---
 
+
+
 ## Stretch goal
 
 Extend `classify_ticket` to return a `dataclass` with `route`, `suggested_tools: list[str]`, and `requires_hitl: bool`. Update tests. Do **not** call an LLM yet.
 
 ---
+
+
 
 ## Feedback
 
@@ -511,6 +571,8 @@ Extend `classify_ticket` to return a `dataclass` with `route`, `suggested_tools:
 - Note the **task number**, what you expected, and what happened — that signal improves the next revision of this lesson.
 
 ---
+
+
 
 ## Navigate
 
