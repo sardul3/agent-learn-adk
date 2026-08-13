@@ -30,5 +30,16 @@
     "line_count": 9,
     "order_total_usd": 214.55,
     "damage_report": "melted_dairy"
+  },
+  "MC-1048310": {
+    "order_id": "MC-1048310",
+    "customer_id": "C-44102",
+    "lifecycle": "ready_for_pickup",
+    "promised_window_local": "2026-08-12T17:00-19:00",
+    "delivered_at_local": null,
+    "pod_photo_present": false,
+    "shipping_address_city": "Austin",
+    "line_count": 3,
+    "shorted_sku": "884210"
   }
 }
