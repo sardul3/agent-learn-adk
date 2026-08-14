@@ -1,13 +1,15 @@
 # Meridian ADK Curriculum Roadmap (SME Track)
 
-**~40 lessons** in packs of 5.  
+**~50 lessons** in packs of 5.  
 Gap rationale: [gap-analysis-sme.md](gap-analysis-sme.md)
 
 ```
 Frame → Design → Build → Secure → Evaluate → Judge → Track
   → Trace → Deploy → CI/Canary/Rollback → Chaos/DR/Flags
     → Orchestrate deeply → Knowledge/Models
-    → Quality at scale → Platform → Productize → Capstone
+    → Quality at scale → Platform → SLOs/Gateway
+      → Frontier surfaces (voice, identity, mandates, computer use,
+        code exec, simulation, context) → Productize → Capstone
 ```
 
 ---
@@ -81,28 +83,54 @@ Suggested ops path: `12 → 41 → 32` (ship → release train → resilience).
 
 Suggested quality path: `23 → 24 → 25 → 26 → 27 → 42`.
 
-## Pack F — Platform engineering
+## Pack F — Platform engineering ✅
 
-| # | Lesson | Theme |
+| # | Lesson | Theme | Status |
+|---|--------|--------|--------|
+| 28 | Architecture patterns catalog | Invent router/planner/critic/HITL/hybrid on demand | ✅ |
+| 29 | Sessions & state at scale | Redis/Memorystore, stickiness, replay | ✅ |
+| 30 | Multi-tenant agent platforms | Isolation, quotas, per-tenant tools | ✅ |
+| 31 | FinOps for agents | Cost per task/tenant, budgets, chargeback | ✅ |
+| 32 | Chaos, DR & feature flags | Break tools on purpose; recover; flag graphs | ✅ |
+
+**Production-scale add-ons (after 31/32):**
+
+| # | Lesson | Status |
 |---|--------|--------|
-| 28 | Architecture patterns catalog | Invent router/planner/critic/HITL/hybrid on demand |
-| 29 | Sessions & state at scale | Redis/Memorystore, stickiness, replay |
-| 30 | Multi-tenant agent platforms | Isolation, quotas, per-tenant tools |
-| 31 | FinOps for agents | Cost per task/tenant, budgets, chargeback |
-| 32 | Chaos, DR & feature flags | ✅ Break tools on purpose; recover; flag graphs |
+| 43 | SLOs, capacity & backpressure | ✅ |
+| 44 | LLM gateway, cache & platform quotas | ✅ |
+
+Suggested platform path: `28 → 29 → 30 → 31 → 32 → 43 → 44`.
 
 ## Pack G — Productize & prove SME
 
-| # | Lesson | Theme |
-|---|--------|--------|
-| 33 | SME judgment, teams & teaching | Build vs buy, ownership, mentoring drills |
-| 34 | Enterprise integrations | ITSM, Slack, Pub/Sub, case systems |
-| 35 | Dynamic Agent Creation Platform I | Spec schema → generate ADK package |
-| 36 | Dynamic Agent Creation Platform II | UI/API, validate, eval gate, deploy |
-| 37 | Governance, versioning & agent marketplace | Org lifecycle, deprecation, approvals |
-| 38 | Capstone I — Design from messy problem | Architecture + threat + eval plan |
-| 39 | Capstone II — Ship, measure, incident | Deploy + break + fix from traces |
-| 40 | Capstone III — Mentor & SME defense | Teach a peer; oral defense board |
+| # | Lesson | Theme | Status |
+|---|--------|--------|--------|
+| 33 | SME judgment, teams & teaching | Build vs buy, ownership, mentoring drills | |
+| 34 | Enterprise integrations | ITSM, Slack, Pub/Sub, case systems | |
+| 35 | Dynamic Agent Creation Platform I | Spec schema → generate ADK package | |
+| 36 | Dynamic Agent Creation Platform II | UI/API, validate, eval gate, deploy | |
+| 37 | Governance, versioning & agent marketplace | Org lifecycle, deprecation, approvals | |
+| 38 | Capstone I — Design from messy problem | Architecture + threat + eval plan | |
+| 39 | Capstone II — Ship, measure, incident | Deploy + break + fix from traces | |
+| 40 | Capstone III — Mentor & SME defense | Teach a peer; oral defense board | |
+
+### Frontier surfaces (Pack G, before the capstones) ✅
+
+Modern ADK and agent-engineering surfaces the earlier packs never touch.
+
+| # | Lesson | Theme | Status |
+|---|--------|--------|--------|
+| 45 | Voice & bidirectional streaming | `run_live`, `LiveRequestQueue`, barge-in, transcripts | ✅ |
+| 46 | Agent identity & delegated auth | Confused deputy, OAuth tool auth, workload identity | ✅ |
+| 47 | Agentic commerce & payment mandates | AP2 intent/cart/payment, signed authorization | ✅ |
+| 48 | Computer use & browser agents | `BaseComputer`, allowlist, read-only, confirmation | ✅ |
+| 49 | Sandboxed code execution | Native code executors, escape probes, containment | ✅ |
+| 50 | Simulated users & multi-turn eval | Personas, conversation rubrics, concession drift | ✅ |
+| 51 | Context engineering & context audit | Seven slots, four failure modes, compaction, cache | ✅ |
+
+Suggested order: `45 → 46 → 47 → 48 → 49 → 50 → 51`, then the capstones.  
+Fastest safety win if you cannot do all seven: **46 → 51 → 50**.
 
 ---
 
@@ -126,4 +154,4 @@ You can do **all** of these unaided:
 
 ## Pack shipping cadence
 
-Write/teach **5 lessons at a time**. After Pack E (+ optional 42 RAI): Pack F (28–31; 32 already shipped), etc.
+Write/teach **5 lessons at a time**. After Pack F (+ 43/44): Pack G (33–40), etc.

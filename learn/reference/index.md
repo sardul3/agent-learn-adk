@@ -12,4 +12,4 @@ These pages are generated from `docs/`. Edit the source markdown in the repo; th
 | [Meridian northstar](/reference/meridian-northstar) | You need the product, personas, and success metrics |
 | [Native ADK rule](/reference/NATIVE-ADK) | You are tempted to invent a second runtime |
 | [Curriculum roadmap](/reference/curriculum-roadmap) | You want the 01–40 map and capstone bar |
-| [SME gap analysis](/reference/gap-analysis-sme) | You want why the track is ~40 lessons, not 18 |
+| [SME gap analysis](/reference/gap-analysis-sme) | You want why the track is ~50 lessons, not 18 |

@@ -315,5 +315,7 @@ Add a `/readyz` check that fails when `MERIDIAN_CHAOS_OMS=timeout` so orchestrat
 
 ## Navigate
 
-**←** [Lesson 41 — CI/CD & SRE](41-cicd-sre-deployment-ops.md) · [Lesson 12 — Deploy](12-deployment-ops.md)  
+**←** [Lesson 31 — FinOps](31-finops.md) · [Lesson 41 — CI/CD & SRE](41-cicd-sre-deployment-ops.md)  
+**Also:** [Lesson 12 — Deploy](12-deployment-ops.md)  
+**Next →** [Lesson 43 — SLOs & capacity](43-slos-capacity-backpressure.md)  
 **Track home:** [README](../README.md)

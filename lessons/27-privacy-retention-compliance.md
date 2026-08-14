@@ -414,4 +414,4 @@ Add a “break-glass” viewer that requires dual approval before showing unreda
 **← Prev** [Lesson 26 — Plugins & middleware](26-plugins-callbacks-policy-middleware.md)  
 **Track home:** [README](../README.md)  
 **Bonus:** [Lesson 42 — Responsible AI champion](42-responsible-ai-champion.md)  
-**Next pack:** Lesson 28 — Architecture patterns catalog *(Pack F)*
+**Next pack:** [Lesson 28 — Architecture patterns catalog](28-architecture-catalog.md) *(Pack F)*

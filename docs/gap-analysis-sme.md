@@ -32,11 +32,28 @@ This document lists gaps found against:
 | **Multi-tenant** isolation & quotas | Platform, not single app | **30** |
 | **FinOps** per agent/tenant | $ attribution, budgets | **31** |
 | **Chaos / DR / feature flags** | Reliability engineering | **32** |
+| **SLOs / capacity / backpressure** | Agent SLIs, load shed, pods ≠ TPM | **43** |
+| **LLM gateway / cache / quotas** | Keys, TPM, safe OMS cache | **44** |
 | **Teams, runbooks, teaching** | Lead others | **33** |
 | **ITSM / Slack / Pub/Sub integrations** | Real enterprise glue | **34** |
 | **Dynamic Agent Creation Platform** (2 lessons) | Spec → generate → validate → deploy | **35–36** |
 | **Governance / marketplace / versioning** | Org-scale agent lifecycle | **37** |
 | **Capstone trilogy** (design / ship-debug / mentor) | Prove SME, not demo | **38–40** |
+
+## Second-pass gaps (frontier surfaces, found by auditing the shipped catalog)
+
+The first 44 lessons cover the harness — evals, tracing, release, tenancy, cost, resilience.
+Auditing them against the current ADK surface and 2026 agent practice surfaced seven more.
+
+| Gap | Why SME needs it | What was already there | Now covered in |
+|-----|------------------|------------------------|----------------|
+| **Voice / bidi streaming** | `run_live` + barge-in is a first-class ADK toolkit | Lesson 22 was one-way SSE text | **45** |
+| **Agent identity / delegated auth** | Confused deputy is the top enterprise blocker | Edge API keys only (30) | **46** |
+| **Agentic commerce mandates (AP2)** | Money paths need portable, signed authorization | HITL approval + audit log (07, 15) | **47** |
+| **Computer use / browser agents** | Partner systems with no API | MCP assumed a server exists (16) | **48** |
+| **Sandboxed code execution** | Ad-hoc analysis without building 40 tools | Function tools only (04) | **49** |
+| **Simulated users / multi-turn eval** | Concession drift is invisible to single-turn goldens | Static goldens (08), prod sampling (24) | **50** |
+| **Context engineering audit** | Weak context predicts the matching behavior failure | Token budget + compaction basics (06) | **51** |
 
 ## Pack A/B residual risks (already taught — revisit in later labs)
 
@@ -57,4 +74,4 @@ You are SME when you can, **without hand-waving**:
 7. Generate and govern new agents from product specs  
 8. Mentor another engineer through the same path  
 
-That bar requires **~40 lessons**, not 18.
+That bar requires **~50 lessons**, not 18.

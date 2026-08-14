@@ -44,7 +44,7 @@ features:
       width: 32
       height: 32
     title: Packs are waves
-    details: Finish a pack before the next. Suggested order is A → B → 41 → C → D → E → 42.
+    details: Finish a pack before the next. Suggested order is A → B → 41 → C → D → E → 42 → F.
     link: /packs/
     linkText: See the floor
 ---

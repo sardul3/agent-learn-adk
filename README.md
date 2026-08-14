@@ -1,7 +1,7 @@
 # Google ADK Zero → Hero (SME Track)
 
 Practical mastery path for Google's **Agent Development Kit (ADK)**.  
-~**40 lessons** — because 18 is enough to demo, not enough to be an SME.
+~**50 lessons** — because 18 is enough to demo, not enough to be an SME.
 
 Every lesson advances **Meridian Commerce OrderOps** (Walmart/Kroger/Amazon-scale grocery + eCommerce ops pain).
 
@@ -83,13 +83,33 @@ Customer ticket / ops alert
 
 **RAI bonus:** [42 — Responsible AI champion](lessons/42-responsible-ai-champion.md) (scorecard → fixes → evidence pack)
 
-### Pack F — Platform engineering *(next)*
+### Pack F — Platform engineering ✅
 
-28 Architecture catalog · 29 Sessions at scale · 30 Multi-tenant · 31 FinOps · [32 Chaos/DR/flags](lessons/32-chaos-dr-feature-flags.md) ✅
+| # | Lesson | Theme |
+|---|--------|--------|
+| 28 | [Architecture patterns catalog](lessons/28-architecture-catalog.md) | Router / planner / critic / HITL / hybrid |
+| 29 | [Sessions & state at scale](lessons/29-sessions-at-scale.md) | ADK session services, replay, stickiness |
+| 30 | [Multi-tenant agent platforms](lessons/30-multi-tenant.md) | Isolation, quotas, per-tenant tools |
+| 31 | [FinOps for agents](lessons/31-finops.md) | Cost, budgets, chargeback |
+| 32 | [Chaos, DR & feature flags](lessons/32-chaos-dr-feature-flags.md) | Game days, flags, recover |
+
+**Scale add-ons:** [43 — SLOs, capacity & backpressure](lessons/43-slos-capacity-backpressure.md) · [44 — LLM gateway, cache & quotas](lessons/44-llm-gateway-cache-quotas.md)
 
 ### Pack G — Productize & prove SME
 
 33 Teams/teaching · 34 Enterprise integrations · **35–36 Dynamic Agent Creation Platform** · 37 Governance · **38–40 Capstone trilogy**
+
+**Frontier surfaces (shipped, before the capstones):**
+
+| # | Lesson | Theme |
+|---|--------|--------|
+| 45 | [Voice & bidirectional streaming](lessons/45-voice-bidi-streaming.md) | `run_live`, barge-in, transcripts |
+| 46 | [Agent identity & delegated auth](lessons/46-agent-identity-delegated-auth.md) | Confused deputy, OAuth tool auth |
+| 47 | [Agentic commerce & payment mandates](lessons/47-agentic-commerce-mandates.md) | AP2 intent / cart / payment |
+| 48 | [Computer use & browser agents](lessons/48-computer-use-browser-agents.md) | `BaseComputer` + a real leash |
+| 49 | [Sandboxed code execution](lessons/49-sandboxed-code-execution.md) | Code executors + escape probes |
+| 50 | [Simulated users & multi-turn eval](lessons/50-simulated-users-multiturn-eval.md) | Personas, concession drift |
+| 51 | [Context engineering & context audit](lessons/51-context-engineering-audit.md) | Seven slots, compaction, caching |
 
 ## How to use each lesson
 
@@ -127,4 +147,5 @@ Open `http://localhost:5173`. Saving a lesson reloads the page. See [learn/study
 - Finished Pack B → [Lesson 13](lessons/13-graph-workflows.md)  
 - Finished Pack C → [Lesson 18](lessons/18-advanced-rag-retail-policy.md)  
 - Finished Pack D → [Lesson 23](lessons/23-red-teaming-adversarial-robustness.md)  
-- Finished Pack E → [Lesson 42 — RAI bonus](lessons/42-responsible-ai-champion.md) (then Pack F in the roadmap)
+- Finished Pack E → [Lesson 42 — RAI bonus](lessons/42-responsible-ai-champion.md)  
+- Finished Pack E/42 → [Lesson 28 — Architecture catalog](lessons/28-architecture-catalog.md) (Pack F)
