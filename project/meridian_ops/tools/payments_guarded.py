@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
-HITL_THRESHOLD_USD = 75.0
-_IDEMPOTENCY: dict[str, dict[str, Any]] = {}
+from meridian_ops.safety.validators import validate_refund_args
+from meridian_ops.tools.payments import request_refund as _request_refund
 
 
 def request_refund_guarded(
@@ -13,37 +13,23 @@ def request_refund_guarded(
     idempotency_key: str,
     confirm: bool = False,
 ) -> dict[str, Any]:
-    """Preview or open a refund request (domain tool — used by MCP preview only)."""
-    allowed = {"DAMAGED_ITEM", "MISSING_DELIVERY", "LATE_DELIVERY_CREDIT", "WRONG_ITEM"}
-    if amount_usd <= 0:
-        return {"status": "error", "error_code": "INVALID_AMOUNT"}
-    if not idempotency_key:
-        return {"status": "error", "error_code": "MISSING_IDEMPOTENCY_KEY"}
-    if reason_code not in allowed:
-        return {"status": "error", "error_code": "REASON_NOT_ALLOWED"}
-    if not confirm:
-        return {
-            "status": "success",
-            "preview": True,
-            "order_id": order_id,
-            "amount_usd": amount_usd,
-            "reason_code": reason_code,
-            "requires_hitl": amount_usd > HITL_THRESHOLD_USD,
-        }
-    if idempotency_key in _IDEMPOTENCY:
-        return {**_IDEMPOTENCY[idempotency_key], "replayed": True}
-    payload = {
-        "status": "success",
-        "preview": False,
-        "order_id": order_id,
-        "amount_usd": amount_usd,
-        "reason_code": reason_code,
-        "idempotency_key": idempotency_key,
-        "refund_request_id": f"RFQ-{idempotency_key[:8]}",
-        "requires_hitl": amount_usd > HITL_THRESHOLD_USD,
-        "request_status": (
-            "PENDING_HITL" if amount_usd > HITL_THRESHOLD_USD else "AUTO_APPROVED_LAB_ONLY"
-        ),
-    }
-    _IDEMPOTENCY[idempotency_key] = payload
-    return payload
+    """Validate, then preview or open a refund request.
+
+    confirm=False is a preview. confirm=True is still only a *request*,
+    not a bank settlement — same contract as Lesson 04.
+    """
+    check = validate_refund_args(
+        order_id=order_id,
+        amount_usd=amount_usd,
+        reason_code=reason_code,
+        idempotency_key=idempotency_key,
+    )
+    if not check["ok"]:
+        return {"status": "error", **check}
+    return _request_refund(
+        order_id,
+        amount_usd,
+        reason_code,
+        idempotency_key,
+        confirm=confirm,
+    )

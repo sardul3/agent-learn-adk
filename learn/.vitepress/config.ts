@@ -71,6 +71,10 @@ function nav(): DefaultTheme.NavItem[] {
         { text: 'Meridian northstar', link: '/reference/meridian-northstar' },
         { text: 'Native ADK rule', link: '/reference/NATIVE-ADK' },
         { text: 'SME gap analysis', link: '/reference/gap-analysis-sme' },
+        { text: 'AI engineering gap analysis', link: '/reference/gap-analysis-ai-engineering' },
+        { text: 'Agent platform gap analysis', link: '/reference/gap-analysis-agent-platform' },
+        { text: 'Capstone — agent platform curriculum', link: '/reference/capstone-agent-platform-curriculum' },
+        { text: 'Reading list — SA/SWE arsenal', link: '/reference/ai-engineering-reading-list' },
       ],
     },
   ]
