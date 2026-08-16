@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { withBase, useData } from 'vitepress'
 import { computed } from 'vue'
-import { packs } from '../../curriculum'
+import { packs, lessonCode } from '../../curriculum'
 import { data as lessons } from '../../data/lessons.data'
 import { useProgress } from '../composables/progress'
 
@@ -33,7 +33,7 @@ const done = computed(() => countIn(shipped.value.map((l) => l.slug)))
       style="margin-bottom: 1rem"
     >
       <a class="pack-board__head" :href="withBase(card.url)">
-        <span class="pack-board__letter">{{ String(card.lesson).padStart(2, '0') }}</span>
+        <span class="pack-board__letter">{{ lessonCode(card.slug, card.lesson) }}</span>
         <span>
           <strong>{{ card.title }}</strong>
           <em>{{ card.level }} · {{ card.duration }}</em>

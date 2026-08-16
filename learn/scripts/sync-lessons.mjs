@@ -29,6 +29,28 @@ const PACK_BY_N = {
   41: 'Ops',
 }
 
+function packLetter(filename, n) {
+  if (filename === 'bonus-rl-visual-playground.md') return 'M12'
+  const ml = filename.match(/^ml-(\d+)/)
+  if (ml) {
+    const k = Number(ml[1])
+    if (k <= 5) return 'M0'
+    if (k <= 9) return 'M1'
+    if (k <= 13) return 'M2'
+    if (k <= 18) return 'M3'
+    if (k <= 21) return 'M4'
+    if (k <= 26) return 'M5'
+    if (k <= 31) return 'M6'
+    if (k <= 34) return 'M7'
+    if (k <= 38) return 'M8'
+    if (k <= 41) return 'M9'
+    if (k <= 45) return 'M10'
+    if (k <= 49) return 'M11'
+    return 'M12'
+  }
+  return PACK_BY_N[n] || ''
+}
+
 function yamlEscape(value) {
   if (value == null) return '""'
   const s = String(value).replace(/\s+/g, ' ').trim()
@@ -103,6 +125,15 @@ function rewriteLinks(md) {
       return `[${text}](/lessons/${lessonMatch[1]}${anchor})`
     }
 
+    const mlMatch = cleaned.match(/(?:^|\/)(ml-\d{2}-[a-z0-9-]+)\.md$/i)
+    if (mlMatch) {
+      return `[${text}](/lessons/${mlMatch[1]}${anchor})`
+    }
+
+    if (/bonus-rl-visual-playground\.md$/i.test(cleaned)) {
+      return `[${text}](/lessons/bonus-rl-visual-playground${anchor})`
+    }
+
     const docsMatch = cleaned.match(/(?:^|\/)docs\/([^)]+?)\.md$/i)
     if (docsMatch) {
       const slug = docsMatch[1].replace(/\.md$/i, '')
@@ -127,14 +158,26 @@ function rewriteLinks(md) {
 
 function transformLesson(filename, raw) {
   const slug = filename.replace(/\.md$/, '')
-  const n = Number((slug.match(/^(\d+)/) || [0, 0])[1])
+  let n = Number((slug.match(/^(\d+)/) || [0, 0])[1])
+  const ml = slug.match(/^ml-(\d+)/)
+  if (ml) {
+    const k = Number(ml[1])
+    n = 200 + k
+    if (k >= 50) n += 1
+  }
+  if (slug === 'bonus-rl-visual-playground') n = 250
   const titleLine = (raw.match(/^#\s+(.+)$/m) || [, slug])[1]
-  const title = titleLine.replace(/^Lesson\s+\d+\s+[—–-]\s+/, '').trim()
+  const title = titleLine.replace(/^Lesson\s+\d+\s+[—–-]\s+/, '').replace(/^Bonus lesson\s+[—–-]\s+/, '').trim()
   const level = field(raw, 'Level')
   const duration = field(raw, 'Time').replace(/^~/, '')
   const prerequisites = field(raw, 'Prerequisites')
   const outcome = field(raw, 'Lab outcome')
-  const pack = PACK_BY_N[n] || ''
+  const pack = packLetter(filename, n)
+  const code = slug.startsWith('ml-')
+    ? `ml-${String(slug.match(/^ml-(\d+)/)?.[1] || '00')}`
+    : slug.startsWith('bonus-')
+      ? 'RL'
+      : String(n).padStart(2, '0')
 
   let body = raw.replace(/^#\s+.+\n+/, '')
   body = body.replace(
@@ -156,6 +199,8 @@ function transformLesson(filename, raw) {
     `description: ${yamlEscape(description)}`,
     `outline: [2, 3]`,
     `lesson: ${n}`,
+    `code: ${yamlEscape(code)}`,
+    `track: ${slug.startsWith('ml-') || slug.startsWith('bonus-') ? 'ml' : 'agents'}`,
     `pack: ${yamlEscape(pack)}`,
     `level: ${yamlEscape(level)}`,
     `duration: ${yamlEscape(duration)}`,
@@ -207,7 +252,12 @@ export function syncLessons() {
 
   const lessonFiles = fs
     .readdirSync(LESSONS_SRC)
-    .filter((f) => /^\d+-.+\.md$/.test(f))
+    .filter(
+      (f) =>
+        /^\d+-.+\.md$/.test(f) ||
+        /^ml-\d{2}-.+\.md$/.test(f) ||
+        f === 'bonus-rl-visual-playground.md',
+    )
     .sort()
 
   const keep = new Set(['index.md'])

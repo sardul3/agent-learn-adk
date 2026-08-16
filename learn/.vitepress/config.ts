@@ -2,7 +2,7 @@ import { defineConfig, type DefaultTheme } from 'vitepress'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { Plugin } from 'vite'
-import { packs, shippedLessons } from './curriculum'
+import { shippedLessons, agentPacks, mlPacks, lessonCode, type Pack } from './curriculum'
 import { syncLessons, watchRoots } from '../scripts/sync-lessons.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -34,36 +34,88 @@ function lessonSyncPlugin(): Plugin {
   }
 }
 
-function sidebar(): DefaultTheme.Sidebar {
-  return packs
+function packSidebar(
+  subset: Pack[],
+  opts: { collapsedAfter: number; titlePrefix?: (p: Pack) => string },
+): DefaultTheme.SidebarItem[] {
+  return subset
     .filter((p) => p.lessons.some((l) => l.shipped))
     .map((p, i) => ({
-      text: `Pack ${p.letter} · ${p.title}`,
-      collapsed: i > 0,
+      text: opts.titlePrefix ? opts.titlePrefix(p) : `Pack ${p.letter} · ${p.title}`,
+      collapsed: i > opts.collapsedAfter,
       items: p.lessons
         .filter((l) => l.shipped)
         .map((l) => ({
-          text: `${String(l.n).padStart(2, '0')}  ${l.title}`,
+          text: `${lessonCode(l.slug, l.n)}  ${l.title}`,
           link: `/lessons/${l.slug}`,
         })),
     }))
 }
 
+function browseGroup(): DefaultTheme.SidebarItem {
+  return {
+    text: 'Browse',
+    items: [
+      { text: 'Find a topic', link: '/topics' },
+      { text: 'All packs', link: '/packs/' },
+      { text: 'How to study', link: '/study' },
+    ],
+  }
+}
+
+function sidebar(): DefaultTheme.Sidebar {
+  const agents = [browseGroup(), ...packSidebar(agentPacks, { collapsedAfter: 0 })]
+  const ml = [
+    browseGroup(),
+    {
+      text: 'ML from zero',
+      items: [
+        { text: 'Start at ml-00', link: '/lessons/ml-00-what-a-model-is' },
+        { text: 'RL five worlds', link: '/lessons/bonus-rl-visual-playground' },
+        { text: 'CPU capstone', link: '/lessons/ml-51-meridian-cpu-capstone' },
+      ],
+    },
+    ...packSidebar(mlPacks, {
+      collapsedAfter: 0,
+      titlePrefix: (p) => `${p.letter} · ${p.title.replace(/^Bonus ML — /, '')}`,
+    }),
+  ]
+  return {
+    '/lessons/ml-': ml,
+    '/lessons/bonus-': ml,
+    '/packs/m': ml,
+    '/topics': ml,
+    '/': agents,
+  }
+}
+
 function nav(): DefaultTheme.NavItem[] {
   return [
-    { text: 'Start', link: '/lessons/01-agentic-foundations' },
+    { text: 'Find a topic', link: '/topics' },
     {
-      text: 'Packs',
+      text: 'Agents',
       items: [
-        { text: 'All waves', link: '/packs/' },
-        ...packs.map((p) => ({
+        { text: 'Start at lesson 01', link: '/lessons/01-agentic-foundations' },
+        { text: 'All agent packs', link: '/packs/' },
+        ...agentPacks.map((p) => ({
           text: `Pack ${p.letter} — ${p.title}`,
           link: `/packs/${p.slug}`,
         })),
       ],
     },
+    {
+      text: 'ML from zero',
+      items: [
+        { text: 'Start at ml-00', link: '/lessons/ml-00-what-a-model-is' },
+        { text: 'RL five worlds', link: '/lessons/bonus-rl-visual-playground' },
+        { text: 'CPU capstone', link: '/lessons/ml-51-meridian-cpu-capstone' },
+        ...mlPacks.map((p) => ({
+          text: `${p.letter} — ${p.title.replace(/^Bonus ML — /, '')}`,
+          link: `/packs/${p.slug}`,
+        })),
+      ],
+    },
     { text: 'How to study', link: '/study' },
-    { text: 'Personas', link: '/personas' },
     {
       text: 'Reference',
       items: [
@@ -84,7 +136,7 @@ export default defineConfig({
   title: 'Meridian Learn',
   titleTemplate: ':title · Meridian Learn',
   description:
-    'Google ADK SME track for Meridian Commerce OrderOps — study the lessons as a local (or GitHub Pages) site.',
+    'One shop for AI and ML: Google ADK agents plus a CPU ML track from slope to tiny GPT. Search any topic, walk the lab.',
   lang: 'en-US',
   base,
   cleanUrls: true,
@@ -159,6 +211,23 @@ export default defineConfig({
       provider: 'local',
       options: {
         detailedView: true,
+        translations: {
+          button: {
+            buttonText: 'Search',
+            buttonAriaLabel: 'Search all AI and ML lessons',
+          },
+          modal: {
+            displayDetails: 'Show more',
+            resetButtonTitle: 'Clear search',
+            backButtonTitle: 'Close search',
+            noResultsText: 'No lesson matched — try Find a topic',
+            footer: {
+              selectText: 'open',
+              navigateText: 'move',
+              closeText: 'close',
+            },
+          },
+        },
         miniSearch: {
           searchOptions: {
             fuzzy: 0.2,
@@ -170,7 +239,7 @@ export default defineConfig({
     },
     editLink: {
       pattern: ({ relativePath }) => {
-        if (relativePath.startsWith('lessons/') && /\/\d{2}-/.test(relativePath)) {
+        if (relativePath.startsWith('lessons/')) {
           return `https://github.com/sardul3/agent-learn-adk/edit/main/${relativePath}`
         }
         if (relativePath.startsWith('reference/')) {
@@ -190,8 +259,8 @@ export default defineConfig({
       next: 'Next lane',
     },
     footer: {
-      message: `${shippedLessons.length} shipped lessons · Meridian Commerce OrderOps · native Google ADK`,
-      copyright: 'Study site generated from the curriculum markdown. Labs still live in the repo.',
+      message: `${shippedLessons.length} shipped lessons · agents (ADK) + ML from zero · Meridian Commerce`,
+      copyright: 'Search any topic. Labs live in the repo. This site is the reading room.',
     },
   },
   transformPageData(pageData) {

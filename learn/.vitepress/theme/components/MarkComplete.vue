@@ -2,6 +2,7 @@
 import { useRoute, withBase } from 'vitepress'
 import { computed } from 'vue'
 import { data as lessons } from '../../data/lessons.data'
+import { lessonCode } from '../../curriculum'
 import { useProgress } from '../composables/progress'
 
 const route = useRoute()
@@ -25,7 +26,7 @@ const done = computed(() => (slug.value ? isDone(slug.value) : false))
         {{ done ? 'Completed — click to undo' : 'Mark this lesson complete' }}
       </button>
       <a v-if="next" class="mark-complete__next" :href="withBase(next.url)">
-        Next: {{ String(next.lesson).padStart(2, '0') }} {{ next.title }}
+        Next: {{ lessonCode(next.slug, next.lesson) }} {{ next.title }}
       </a>
     </div>
   </section>

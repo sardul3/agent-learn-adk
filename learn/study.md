@@ -8,6 +8,13 @@ outline: [2, 3]
 
 This site is generated from `lessons/*.md`. Edit a lesson in the repo, save, and the local preview reloads. You do not maintain a second copy of the curriculum.
 
+Two tracks share the same reading room:
+
+- **Agents (ADK)** — start at [lesson 01](/lessons/01-agentic-foundations)
+- **ML from zero** — start at [ml-00](/lessons/ml-00-what-a-model-is)
+
+If you do not know the pack number, open [Find a topic](/topics) or press `/` for full-text search.
+
 ## Daily loop
 
 1. Read the lesson here (search, outline, collapsed answers).
@@ -40,6 +47,8 @@ pnpm dev
 
 The preview is at `http://localhost:5173`. The converter watches `lessons/` and `docs/` and regenerates VitePress pages on save.
 
+**Bonus ML track:** CPU lessons `ml-00` … `ml-51` plus the RL playground. Catalog: [Find a topic](/topics). Labs: `project/ml_playground/` and `project/rl_playground/`. They are not Native ADK.
+
 ::: info What the converter does
 - Adds frontmatter (level, time, pack, outcome) for the ticket header and search
 - Turns `> **Tip:**` / `> **Watch out:**` into GitHub-flavored alerts
@@ -52,6 +61,7 @@ The preview is at `http://localhost:5173`. The converter watches `lessons/` and 
 
 | Feature | Where |
 |---|---|
+| **Find a topic** (filter by word + track) | [Catalog](/topics) |
 | Local full-text search (`/` or the search box) | Nav bar — MiniSearch, works offline |
 | Lesson ticket (pack, time, outcome) | Top of every lesson |
 | On this lesson | Right outline |

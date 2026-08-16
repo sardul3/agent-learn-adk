@@ -1,24 +1,37 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress'
 import { computed } from 'vue'
-import { packs } from '../../curriculum'
+import { packs, lessonCode, type LessonTrack } from '../../curriculum'
 import { useProgress } from '../composables/progress'
+
+const props = withDefaults(
+  defineProps<{
+    track?: 'all' | LessonTrack
+  }>(),
+  { track: 'all' },
+)
 
 const { countIn, isDone } = useProgress()
 
 const waves = computed(() =>
-  packs.map((pack) => {
-    const shipped = pack.lessons.filter((l) => l.shipped)
-    const slugs = shipped.map((l) => l.slug)
-    const done = countIn(slugs)
-    return {
-      ...pack,
-      shipped,
-      done,
-      total: shipped.length,
-      pending: pack.lessons.filter((l) => !l.shipped).length,
-    }
-  }),
+  packs
+    .filter((pack) => {
+      if (props.track === 'all') return true
+      if (props.track === 'ml') return pack.letter.startsWith('M')
+      return !pack.letter.startsWith('M')
+    })
+    .map((pack) => {
+      const shipped = pack.lessons.filter((l) => l.shipped)
+      const slugs = shipped.map((l) => l.slug)
+      const done = countIn(slugs)
+      return {
+        ...pack,
+        shipped,
+        done,
+        total: shipped.length,
+        pending: pack.lessons.filter((l) => !l.shipped).length,
+      }
+    }),
 )
 </script>
 
@@ -28,7 +41,7 @@ const waves = computed(() =>
       <a class="pack-board__head" :href="withBase(`/packs/${wave.slug}`)">
         <span class="pack-board__letter">{{ wave.letter }}</span>
         <span>
-          <strong>{{ wave.title }}</strong>
+          <strong>{{ wave.title.replace(/^Bonus ML — /, 'ML — ') }}</strong>
           <em v-if="wave.total">{{ wave.done }}/{{ wave.total }} complete</em>
           <em v-else>Not shipped yet</em>
         </span>
@@ -39,7 +52,7 @@ const waves = computed(() =>
             :href="withBase(`/lessons/${item.slug}`)"
             :class="{ 'is-done': isDone(item.slug) }"
           >
-            <span>{{ String(item.n).padStart(2, '0') }}</span>
+            <span>{{ lessonCode(item.slug, item.n) }}</span>
             {{ item.title }}
           </a>
         </li>

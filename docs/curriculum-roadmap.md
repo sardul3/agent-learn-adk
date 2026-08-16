@@ -134,6 +134,36 @@ Fastest safety win if you cannot do all seven: **46 → 51 → 50**.
 
 ---
 
+## Bonus — ML from zero (CPU, optional)
+
+This is **not** the ADK SME path and **not** Native ADK. It exists so models stop feeling like magic before Pack D (RAG, vision, routing).
+
+- Hardware: **laptop CPU only**. Tiny models. Honest quality labels.
+- Story: Maya’s warehouse (packing time, tickets, boxes, docks).
+- Labs: `project/ml_playground/` and the already-shipped `project/rl_playground/`.
+- Start: [lessons/ml-00-what-a-model-is.md](../lessons/ml-00-what-a-model-is.md)
+- Order: **M0 → M1 → … → M11 → M12 (RL + capstone)**. Do not skip ADK safety (Packs A/E).
+
+| Pack | What you learn | Lessons |
+|------|----------------|---------|
+| M0 | Slope, vectors, dot product, tables, gradient as a nudge | ml-00 … ml-05 |
+| M1 | Splits, leakage, scaling, bias/variance | ml-06 … ml-09 |
+| M2 | Linear regression | ml-10 … ml-13 |
+| M3 | Classification | ml-14 … ml-18 |
+| M4 | Clusters, PCA, anomalies | ml-19 … ml-21 |
+| M5 | Classical NLP | ml-22 … ml-26 |
+| M6 | Deep learning core | ml-27 … ml-31 |
+| M7 | RNNs | ml-32 … ml-34 |
+| M8 | Images | ml-35 … ml-38 |
+| M9 | Video on CPU | ml-39 … ml-41 |
+| M10 | Attention / transformers | ml-42 … ml-45 |
+| M11 | Tiny GPT / you-bot | ml-46 … ml-49 |
+| M12 | RL playground + Q vs net + CPU capstone | bonus-rl, ml-50, ml-51 |
+
+We will **not** pretend you train GPT-4, ImageNet, or hour-long 1080p video on a laptop.
+
+---
+
 ## Suggested mastery order (never skip packs)
 
 `A → B → C → D → E → F → G`  

@@ -46,7 +46,9 @@ watch(
     </button>
     <p class="wave-progress__hint">
       Saved in this browser only.
-      <a :href="withBase('/packs/')">All waves</a>
+      <a :href="withBase('/topics')">Find a topic</a>
+      ·
+      <a :href="withBase('/packs/')">All packs</a>
     </p>
   </div>
 </template>

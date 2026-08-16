@@ -74,9 +74,15 @@ provide('toggle-appearance', async ({ clientX: x, clientY: y }: MouseEvent) => {
       <div class="lane-404">
         <p class="lane-404__kicker">Empty lane</p>
         <h1>This ticket is not on the floor.</h1>
-        <p>The URL does not match a shipped lesson. Return to the curriculum and pick a wave.</p>
+        <p>The URL does not match a shipped lesson. Search, or pick a track.</p>
         <p>
-          <a :href="withBase('/')">Back to Meridian Learn</a>
+          <a :href="withBase('/topics')">Find a topic</a>
+          ·
+          <a :href="withBase('/lessons/01-agentic-foundations')">Agents</a>
+          ·
+          <a :href="withBase('/lessons/ml-00-what-a-model-is')">ML from zero</a>
+          ·
+          <a :href="withBase('/')">Home</a>
         </p>
       </div>
     </template>

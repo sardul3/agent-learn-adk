@@ -1,4 +1,6 @@
 .venv/
+**/.venv/
+project/ml_playground/my_voice.txt
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -19,5 +21,10 @@ node_modules/
 learn/.vitepress/cache/
 learn/.vitepress/dist/
 learn/lessons/[0-9]*.md
+learn/lessons/ml-*.md
+learn/lessons/bonus-*.md
 learn/reference/*
 !learn/reference/index.md
+**/.adk/
+project/**/Untitled
+.cursor/

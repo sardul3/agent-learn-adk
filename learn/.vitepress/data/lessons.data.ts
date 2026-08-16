@@ -1,11 +1,13 @@
 import { createContentLoader } from 'vitepress'
-import { packForLesson } from '../curriculum'
+import { packForLesson, lessonCode, lessonTrack } from '../curriculum'
 
 export interface LessonCard {
   url: string
   slug: string
   title: string
   lesson: number
+  code: string
+  track: string
   pack: string
   packTitle: string
   level: string
@@ -32,6 +34,8 @@ export default createContentLoader('lessons/*.md', {
           slug,
           title: String(page.frontmatter.title ?? ''),
           lesson,
+          code: String(page.frontmatter.code ?? lessonCode(slug, lesson)),
+          track: String(page.frontmatter.track ?? lessonTrack(slug)),
           pack: String(page.frontmatter.pack ?? pack?.letter ?? ''),
           packTitle: pack?.title ?? '',
           level: String(page.frontmatter.level ?? ''),
